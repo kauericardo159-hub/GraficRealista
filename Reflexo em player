@@ -1,0 +1,35 @@
+-- Script de Reflexo e Material Metálico/Vidro para o Avatar
+local Player = game:GetService("Players").LocalPlayer
+
+local function applyReflections(character)
+    if not character then return end
+    
+    -- Percorre todas as partes, acessórios e roupas do seu personagem
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") or part:IsA("MeshPart") or part:IsA("Part") then
+            
+            -- 1. APLICA A REFLETÂNCIA (0.2 conforme pedido)
+            part.Reflectance = 0.2
+            
+            -- 2. ALTERA O MATERIAL PARA MÁXIMO REFLEXO
+            -- O material 'Glass' no Roblox é o que melhor reflete o 'Skybox' e luzes
+            -- Se preferir algo menos "transparente", use 'SmoothPlastic'
+            part.Material = Enum.Material.Glass
+            
+            -- 3. AJUSTE DE COR (Opcional)
+            -- Garante que a cor original se mantenha, mas com o brilho do vidro
+            if part:IsA("MeshPart") then
+                part.RenderFidelity = Enum.RenderFidelity.Precise
+            end
+        end
+    end
+end
+
+-- Aplica ao carregar e sempre que o personagem renascer
+Player.CharacterAdded:Connect(applyReflections)
+
+if Player.Character then
+    applyReflections(Player.Character)
+end
+
+print("Reflexos de 0.2 e Material de Alta Performance aplicados ao Avatar!")
