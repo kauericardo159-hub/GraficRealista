@@ -1,0 +1,30 @@
+-- Sombras Realistas (Client-Side Only)
+-- Este script foca exclusivamente na fidelidade das sombras
+
+local Lighting = game:GetService("Lighting")
+
+local function applyRealisticShadows()
+    -- Ativa o cálculo de sombras em tempo real mais preciso disponível
+    Lighting.GlobalShadows = true
+    
+    -- ShadowSoftness define quão "esfumadas" são as bordas da sombra
+    -- Um valor entre 0.1 e 0.2 traz um aspecto mais nítido e realista
+    Lighting.ShadowSoftness = 0.15
+    
+    -- Ajusta a renderização para o modo Future (se o hardware suportar)
+    -- O modo "Future" é o que permite sombras de luzes locais (lâmpadas, tochas)
+    if settings().Rendering.QualityLevel.Value >= 8 then
+        Lighting.Technology = Enum.Technology.Future
+    else
+        Lighting.Technology = Enum.Technology.ShadowMap
+    end
+end
+
+-- Executa a função
+applyRealisticShadows()
+
+-- Garante que, se o sol se mover, as sombras continuem se comportando bem
+Lighting:GetPropertyChangedSignal("ClockTime"):Connect(applyRealisticShadows)
+
+print("Upgrade de Sombras ativado com sucesso!")
+
