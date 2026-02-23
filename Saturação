@@ -1,0 +1,49 @@
+-- RTX Vivid Colors & Eye Protection
+-- Este script foca em saturação equilibrada e correção de gama
+
+local Lighting = game:GetService("Lighting")
+
+local function applyVividEnhancement()
+    -- 1. GERENCIAMENTO DE COR (ColorCorrection)
+    local color = Lighting:FindFirstChild("VividRTX") or Instance.new("ColorCorrectionEffect")
+    color.Name = "VividRTX"
+    color.Parent = Lighting
+    
+    -- Configurações para cores "Vivas" mas seguras:
+    color.Brightness = 0.05 -- Aumento leve para não cegar
+    color.Contrast = 0.2    -- Deixa as sombras mais pretas e luzes mais nítidas
+    color.Saturation = 0.35 -- O "pulo do gato": deixa as cores ricas sem ficarem neon
+    color.TintColor = Color3.fromRGB(255, 251, 245) -- Tom levemente quente para reduzir a luz azul
+
+    -- 2. NITIDEZ E PROFUNDIDADE (Bloom)
+    local bloom = Lighting:FindFirstChild("SoftBloom") or Instance.new("BloomEffect")
+    bloom.Name = "SoftBloom"
+    bloom.Parent = Lighting
+    bloom.Intensity = 0.4   -- Brilho controlado nas luzes
+    bloom.Size = 12         -- Espalhamento suave
+    bloom.Threshold = 2.5   -- Só brilha o que for realmente luz (evita brilho no chão/paredes)
+
+    -- 3. ATMOSFERA (Remoção de Neblina Cinza)
+    -- Isso faz com que as cores distantes não fiquem lavadas/cinzas
+    local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere", Lighting)
+    atmosphere.Density = 0.2
+    atmosphere.Glare = 0.1
+    atmosphere.Haze = 0
+    atmosphere.Color = Color3.fromRGB(200, 200, 200)
+    atmosphere.Decay = Color3.fromRGB(150, 150, 150)
+
+    -- 4. AJUSTE DE EXPOSIÇÃO (Eye Protection)
+    -- Impede que o sol ou luzes fortes fiquem brancas demais
+    Lighting.ExposureCompensation = -0.1 
+end
+
+-- Executa e mantém o estado caso o jogo tente resetar as configurações
+applyVividEnhancement()
+
+Lighting.Changed:Connect(function(prop)
+    if prop == "ClockTime" or prop == "Brightness" then
+        applyVividEnhancement()
+    end
+end)
+
+print("Sistema de Cores Vívidas e Proteção Ocular Ativado!")
