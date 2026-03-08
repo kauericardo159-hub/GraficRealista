@@ -8,7 +8,7 @@ print("🚀 Iniciando sistema...")
 
 -- 1. Reflexos RTX.
 print("🌇 Carregando Reflexos...")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/Painel-Administrativo/refs/heads/main/%F0%9F%93%9C%3A%20PanelInterface.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/GraficRealista/refs/heads/main/Reflexos"))()
 task.wait(1)
 
 --[[
