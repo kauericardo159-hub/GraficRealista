@@ -12,18 +12,18 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/Gr
 task.wait(1)
 
 -- 2. Saturação e Color
-print("🌇 Carregando Lista de Comandos...")
+print("🌇 Carregando Saturação & Color...")
 loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/GraficRealista/refs/heads/main/Color%20%26%20Saturation"))()
 task.wait(1)
 
 -- 3. Sombras dinâmicas
-print("🌇 Carregando Extra Lista de Comandos...")
+print("🌇 Carregando Sombras dinâmicas...")
 loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/GraficRealista/refs/heads/main/Sombras%20%26%20Depth%20(Realismo)"))()
 task.wait(1)
 
 --[[
--- 4. 
-print("🌇 Carregando Controlador do Botão...")
+-- 4. Neon Protogen Acessórios.
+print("🌇 Carregando Neon Acessório...")
 loadstring(game:HttpGet(""))()
 task.wait(1)
 
