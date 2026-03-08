@@ -1,0 +1,35 @@
+local Lighting = game:GetService("Lighting")
+
+-- 1. Forçando o motor gráfico de sombras mais avançado
+-- O 'Future' é o que permite sombras de luzes locais (lâmpadas, tochas)
+Lighting.Technology = Enum.Technology.Future
+Lighting.ShadowSoftness = 0.2 -- Deixa as bordas das sombras mais nítidas (estilo RTX)
+
+-- 2. Ajuste de Oclusão Ambiental (Sombras de contato)
+-- Isso faz com que cantos de paredes e frestas fiquem levemente mais escuros
+Lighting.EnvironmentDiffuseScale = 1
+Lighting.EnvironmentSpecularScale = 1
+Lighting.GlobalShadows = true -- Garante que as sombras estejam ligadas
+
+-- 3. Configuração de Sombras "Pretas" vs Sombras "Coloridas"
+-- Em um RTX real, a sombra não é apenas preta, ela é influenciada pelo céu
+Lighting.OutdoorAmbient = Color3.fromRGB(40, 40, 50) -- Sombras levemente azuladas (frio/realista)
+Lighting.Ambient = Color3.fromRGB(20, 20, 20) -- Sombras internas
+
+-- 4. Efeito de Profundidade de Campo (Depth of Field)
+-- Isso desfoca levemente o fundo, focando a atenção no Player e deixando o visual "caro"
+local dof = Lighting:FindFirstChild("RTX_DOF") or Instance.new("DepthOfFieldEffect")
+dof.Name = "RTX_DOF"
+dof.FarIntensity = 0.1 -- Desfoque bem leve ao longe
+dof.FocusDistance = 20
+dof.InFocusRadius = 50
+dof.NearIntensity = 0 -- Não desfoca o que está perto para não atrapalhar a gameplay
+dof.Parent = Lighting
+
+-- 5. Shadow Map Fix (Para mapas antigos que usam Voxel)
+-- Se o jogo não permitir 'Future', ele força o ShadowMap que é melhor que o padrão
+if Lighting.Technology ~= Enum.Technology.Future then
+    Lighting.Technology = Enum.Technology.ShadowMap
+end
+
+print("System 3: Sombras e Profundidade Ativados.")
