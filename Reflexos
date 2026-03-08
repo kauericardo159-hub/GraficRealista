@@ -1,0 +1,55 @@
+local REFLECT_LEVEL = 0.3 -- Ajuste entre 0.1 e 0.5 para o nível de brilho
+local TEXTURE_TRANS = 0.4 -- Deixa a skin/roupa aparecer, mas permite o reflexo brilhar
+
+local function applyRTX(obj)
+    -- Ignora scripts e pastas
+    if obj:IsA("LuaSourceContainer") or obj:IsA("Folder") then return end
+
+    -- Sistema para Players, Outros Jogadores e NPCs (Bots)
+    -- Verificamos se o objeto faz parte de um modelo com Humanoid
+    local character = obj:FindFirstAncestorOfClass("Model")
+    local isHumanoid = character and character:FindFirstChildOfClass("Humanoid")
+    local isAccessory = obj:IsDescendantOf(character) and obj:FindFirstAncestorOfClass("Accessory")
+
+    if obj:IsA("BasePart") then
+        -- Mantém Neon e Vidro para não estragar efeitos do mapa
+        if obj.Material ~= Enum.Material.Neon and obj.Material ~= Enum.Material.Glass then
+            
+            if isHumanoid or isAccessory then
+                -- USANDO SMOOTHPLASTIC: Mantém a cor viva e não escurece o player
+                obj.Material = Enum.Material.SmoothPlastic
+                obj.Reflectance = REFLECT_LEVEL
+            else
+                -- Partes do cenário
+                obj.Material = Enum.Material.Plastic
+                obj.Reflectance = 0.2
+            end
+        end
+    end
+
+    -- Ajuste de Texturas (Roupas e Skins)
+    if obj:IsA("Texture") or obj:IsA("Decal") then
+        if obj.Name ~= "face" then -- Preserva o rosto nítido
+            obj.Transparency = TEXTURE_TRANS
+        end
+    end
+end
+
+-- Aplicação em tudo que já existe no jogo
+for _, item in pairs(game.Workspace:GetDescendants()) do
+    applyRTX(item)
+end
+
+-- ESSENCIAL: Garante que novos players que entrarem ou NPCs que spawnarem fiquem RTX
+game.Workspace.DescendantAdded:Connect(function(newItem)
+    task.wait(0.5) -- Tempo para o personagem carregar as roupas
+    applyRTX(newItem)
+end)
+
+-- Ajuste de Iluminação para evitar que o reflexo suma no escuro
+local lighting = game:GetService("Lighting")
+lighting.EnvironmentSpecularScale = 1
+lighting.EnvironmentDiffuseScale = 1
+lighting.OutdoorAmbient = Color3.fromRGB(100, 100, 100) -- Evita que sombras fiquem pretas demais
+
+print("RTX Global Ativado: SmoothPlastic (Cores Vivas + Brilho)")
