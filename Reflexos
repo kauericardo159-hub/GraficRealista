@@ -1,7 +1,7 @@
 -- Configurações de Reflexo
 local BODY_REFLECT = 0.3      -- Brilho do corpo do personagem
-local ACCESSORY_REFLECT = 0.4 -- Brilho levemente maior nos acessórios
-local TEXTURE_TRANS = 0.35    -- Transparência das texturas aplicadas sobre as peças
+local ACCESSORY_REFLECT = 0.6 -- Brilho levemente maior nos acessórios
+local TEXTURE_TRANS = 0.45    -- Transparência das texturas aplicadas sobre as peças
 
 local function applyPlayerReflections(obj)
     -- Evita erros com scripts ou pastas
