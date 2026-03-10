@@ -1,37 +1,33 @@
--- Configurações Ajustadas (Menos brilho, mais cor)
-local SATURATION_LEVEL = 0.35 -- Cores mais vibrantes
-local CONTRAST_LEVEL = 0.2    -- Cores mais profundas (pretos mais escuros)
-local BRIGHTNESS_LEVEL = -0.05 -- Reduzido para o branco não "estourar"
-local BLOOM_INTENSITY = 0.3   -- Brilho mais sutil
-local BLOOM_THRESHOLD = 2.5   -- ALTO: Impede que o branco comum brilhe (só Neon brilha)
+-- Configurações de Estilo (Foco em nitidez e cor)
+local SATURATION_LEVEL = 0.25 -- Deixa as cores mais vivas
+local CONTRAST_LEVEL = 0.15   -- Melhora a profundidade sem escurecer demais
+local BRIGHTNESS_LEVEL = 0.0  -- Neutro para não estourar o branco
+local BLOOM_INTENSITY = 0.25  -- Brilho suave apenas em luzes fortes
+local BLOOM_THRESHOLD = 2.0   -- Garante que roupas brancas NÃO brilhem
 
 local Lighting = game:GetService("Lighting")
 
--- 1. Corretor de Cores (Foco em Profundidade)
-local colorCorrection = Lighting:FindFirstChild("RTX_ColorCorrection") or Instance.new("ColorCorrectionEffect")
-colorCorrection.Name = "RTX_ColorCorrection"
+-- 1. Color Correction (Atua como um filtro de lente, não mexe no Fog)
+local colorCorrection = Lighting:FindFirstChild("RTX_Color") or Instance.new("ColorCorrectionEffect")
+colorCorrection.Name = "RTX_Color"
 colorCorrection.Saturation = SATURATION_LEVEL
 colorCorrection.Contrast = CONTRAST_LEVEL
-colorCorrection.Brightness = BRIGHTNESS_LEVEL -- Brilho negativo ajuda a equilibrar o RTX
+colorCorrection.Brightness = BRIGHTNESS_LEVEL
 colorCorrection.Parent = Lighting
 
--- 2. Sistema de Bloom (Suave e Seletivo)
+-- 2. Bloom (Efeito de brilho apenas para materiais Neon e Sol)
 local bloom = Lighting:FindFirstChild("RTX_Bloom") or Instance.new("BloomEffect")
 bloom.Name = "RTX_Bloom"
 bloom.Intensity = BLOOM_INTENSITY
-bloom.Size = 10 
-bloom.Threshold = BLOOM_THRESHOLD -- O segredo: só brilha o que for MUITO intenso
+bloom.Size = 8
+bloom.Threshold = BLOOM_THRESHOLD -- Ignora cores claras normais
 bloom.Parent = Lighting
 
--- 3. SunRays (Apenas para profundidade)
-local sunRays = Lighting:FindFirstChild("RTX_SunRays") or Instance.new("SunRaysEffect")
-sunRays.Name = "RTX_SunRays"
-sunRays.Intensity = 0.05 -- Quase imperceptível, apenas para atmosfera
+-- 3. SunRays (Efeito de raios solares dinâmico)
+-- Se o jogo já tiver, ele apenas ajusta. Se não tiver, ele cria um bem leve.
+local sunRays = Lighting:FindFirstChildOfClass("SunRaysEffect") or Instance.new("SunRaysEffect")
+sunRays.Intensity = 0.05
 sunRays.Spread = 1
 sunRays.Parent = Lighting
 
--- 4. Limpeza de Exposição (Garante que o branco não brilhe sozinho)
-Lighting.ExposureCompensation = -0.1 -- Compensa a iluminação forte do mapa
-Lighting.Brightness = 2 -- Brilho interno do motor equilibrado
-
-print("🎨 System 2: Estética Visual Melhorada (Cores Vivas, Sem Estouro).")
+print("✅ System 2: Filtros aplicados (Fog e Ciclo Dia/Noite preservados).")
