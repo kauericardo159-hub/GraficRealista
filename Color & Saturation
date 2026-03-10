@@ -1,39 +1,37 @@
--- Configurações de Estilo (Ajuste fino)
-local SATURATION_LEVEL = 0.25 -- Saturação (Cores mais vivas)
-local CONTRAST_LEVEL = 0.15   -- Contraste (Cores mais profundas)
-local BRIGHTNESS_LEVEL = 0.05 -- Brilho extra leve
-local BLOOM_INTENSITY = 0.4   -- Intensidade do brilho nas luzes/neon
+-- Configurações Ajustadas (Menos brilho, mais cor)
+local SATURATION_LEVEL = 0.35 -- Cores mais vibrantes
+local CONTRAST_LEVEL = 0.2    -- Cores mais profundas (pretos mais escuros)
+local BRIGHTNESS_LEVEL = -0.05 -- Reduzido para o branco não "estourar"
+local BLOOM_INTENSITY = 0.3   -- Brilho mais sutil
+local BLOOM_THRESHOLD = 2.5   -- ALTO: Impede que o branco comum brilhe (só Neon brilha)
 
 local Lighting = game:GetService("Lighting")
 
--- 1. Criando o Corretor de Cores
+-- 1. Corretor de Cores (Foco em Profundidade)
 local colorCorrection = Lighting:FindFirstChild("RTX_ColorCorrection") or Instance.new("ColorCorrectionEffect")
 colorCorrection.Name = "RTX_ColorCorrection"
 colorCorrection.Saturation = SATURATION_LEVEL
 colorCorrection.Contrast = CONTRAST_LEVEL
-colorCorrection.Brightness = BRIGHTNESS_LEVEL
+colorCorrection.Brightness = BRIGHTNESS_LEVEL -- Brilho negativo ajuda a equilibrar o RTX
 colorCorrection.Parent = Lighting
 
--- 2. Sistema de Bloom (Efeito de brilho nas partes claras e Neon)
+-- 2. Sistema de Bloom (Suave e Seletivo)
 local bloom = Lighting:FindFirstChild("RTX_Bloom") or Instance.new("BloomEffect")
 bloom.Name = "RTX_Bloom"
 bloom.Intensity = BLOOM_INTENSITY
-bloom.Size = 12 -- Espalhamento do brilho
-bloom.Threshold = 0.8 -- Só faz brilhar o que for realmente claro
+bloom.Size = 10 
+bloom.Threshold = BLOOM_THRESHOLD -- O segredo: só brilha o que for MUITO intenso
 bloom.Parent = Lighting
 
--- 3. SunRays (Raios de Sol para um visual cinematográfico)
+-- 3. SunRays (Apenas para profundidade)
 local sunRays = Lighting:FindFirstChild("RTX_SunRays") or Instance.new("SunRaysEffect")
 sunRays.Name = "RTX_SunRays"
-sunRays.Intensity = 0.1 -- Leve para não atrapalhar a visão
-sunRays.Spread = 0.5
+sunRays.Intensity = 0.05 -- Quase imperceptível, apenas para atmosfera
+sunRays.Spread = 1
 sunRays.Parent = Lighting
 
--- 4. Ajuste de Atmosfera (Opcional, deixa o horizonte mais limpo)
-local sky = Lighting:FindFirstChildOfClass("Sky")
-if sky then
-    -- Se o jogo tiver Sky, limpamos um pouco a névoa para o RTX brilhar
-    Lighting.FogEnd = 100000
-end
+-- 4. Limpeza de Exposição (Garante que o branco não brilhe sozinho)
+Lighting.ExposureCompensation = -0.1 -- Compensa a iluminação forte do mapa
+Lighting.Brightness = 2 -- Brilho interno do motor equilibrado
 
-print("System 2: Saturação e Estética Visual Carregados.")
+print("🎨 System 2: Estética Visual Melhorada (Cores Vivas, Sem Estouro).")
