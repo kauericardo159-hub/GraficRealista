@@ -12,7 +12,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/Gr
 
 -- 2. Saturação e Color
 print("🌇 Carregando Saturação & Color...")
-loadstring(game:HttpGet(""))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/kauericardo159-hub/GraficRealista/refs/heads/main/Shader"))()
 
 print("✅ Shader RTX Carregado com Sucesso!")
 
