@@ -2,11 +2,11 @@
 local BODY_REFLECT = 0.3      -- Brilho do corpo do personagem
 local ACCESSORY_REFLECT = 0.6 -- Brilho levemente maior nos acessórios
 local TEXTURE_TRANS = 0.45    -- Transparência das texturas aplicadas sobre as peças
-
+ 
 local function applyPlayerReflections(obj)
     -- Evita erros com scripts ou pastas
     if obj:IsA("LuaSourceContainer") or obj:IsA("Folder") then return end
-
+    
     -- 1. IDENTIFICAÇÃO DE PLAYERS E BOTS
     -- Verifica se o objeto está dentro de um Modelo que possui um Humanoid
     local character = obj:FindFirstAncestorOfClass("Model")
@@ -17,7 +17,7 @@ local function applyPlayerReflections(obj)
             -- Ignora Neon e ForceField para não quebrar efeitos de magia ou visores brilhantes
             if obj.Material ~= Enum.Material.Neon and obj.Material ~= Enum.Material.ForceField then
                 
-                -- Usa SmoothPlastic para manter as cores vivas e refletir a luz ambiente
+                -- Usa SmoothPlastic para refletir a luz ambiente definida no seu mapa
                 obj.Material = Enum.Material.SmoothPlastic
                 
                 -- Separa a intensidade: Acessórios brilham um pouco mais que o corpo
@@ -28,7 +28,7 @@ local function applyPlayerReflections(obj)
                 end
             end
         end
-
+        
         -- 3. AJUSTE DE CAMADAS (Texturas e Decals)
         -- Reduz a opacidade das imagens coladas nas peças para o brilho aparecer por baixo
         if obj:IsA("Texture") or obj:IsA("Decal") then
@@ -39,37 +39,20 @@ local function applyPlayerReflections(obj)
         end
     end
 end
-
+ 
 -- ==========================================
--- SISTEMA DE ILUMINAÇÃO (O Segredo do Reflexo)
+-- EXECUÇÃO E MONITORAMENTO (Apenas Personagens)
 -- ==========================================
-local Lighting = game:GetService("Lighting")
-
--- EnvironmentSpecularScale é o que faz o SmoothPlastic refletir o céu e as luzes ao redor.
--- Sem isso, o reflexo fica opaco e sem vida.
-Lighting.EnvironmentSpecularScale = 1 
-Lighting.EnvironmentDiffuseScale = 1
-Lighting.GlobalShadows = true
-
--- Ajusta a luz ambiente para não deixar as sombras pretas demais, 
--- o que ajuda o reflexo a se destacar de forma suave.
-Lighting.OutdoorAmbient = Color3.fromRGB(150, 150, 150)
-Lighting.ColorShift_Top = Color3.fromRGB(255, 252, 245) -- Luz do sol levemente quente
-
--- ==========================================
--- EXECUÇÃO GLOBAL E MONITORAMENTO
--- ==========================================
-
--- Varre o mapa em busca dos players e bots que já estão carregados
+ 
+-- Varre o workspace em busca de partes de players/NPCs já existentes
 for _, item in pairs(game.Workspace:GetDescendants()) do
     applyPlayerReflections(item)
 end
-
--- Monitora constantemente novas partes sendo carregadas
--- (Ex: Alguém entrou no mapa, deu respawn ou equipou um item novo)
+ 
+-- Monitora a entrada de novos personagens ou itens equipados
 game.Workspace.DescendantAdded:Connect(function(newItem)
-    task.wait(0.1) -- Delay microscópico para o Roblox terminar de renderizar a peça
+    task.wait(0.1) -- Pequeno delay para garantir que o objeto foi carregado
     applyPlayerReflections(newItem)
 end)
-
-print("✨ Reflexos Ativados: Players e Bots com SmoothPlastic e Iluminação Especular!")
+ 
+print("✨ Reflexos Ativados apenas em Players e NPCs (Sem alterações no Lighting).")
